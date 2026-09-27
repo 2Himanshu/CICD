@@ -19,10 +19,11 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Running Unit Tests...'
-                // Since we are running inside Jenkins, we use a Go docker image to run the tests
-                // This keeps our Jenkins server clean and ensures we use the right Go version
+                // Instead of mounting volumes (which is tricky when Jenkins is inside Docker itself),
+                // we build the test environment using the 'builder' stage of our Dockerfile
                 sh '''
-                docker run --rm -v ${WORKSPACE}:/app -w /app golang:1.21-alpine go test -v ./...
+                docker build --target builder -t cicd-test-env .
+                docker run --rm cicd-test-env go test -v ./...
                 '''
             }
         }
