@@ -1,5 +1,5 @@
 # Build stage
-FROM golang:1.21-alpine AS builder
+FROM golang:alpine AS builder
 WORKDIR /app
 COPY go.mod ./
 # COPY go.sum ./ # Uncomment if you add dependencies and generate a go.sum
